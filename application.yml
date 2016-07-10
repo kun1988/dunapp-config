@@ -1,0 +1,44 @@
+#所有引用了config-servce架包的都可以使用这里面的配置项
+#Actuator management path
+#management.context-path: /admin
+
+#info:
+#  configuration: Read From Config Service application.properties-2016
+
+#Enabling actuator endpoints  turbine也用到了
+endpoints:
+  restart:
+    enabled: true
+  shutdown:
+    enabled: true
+  health:
+    sensitive: false
+
+logging:
+  level:
+    root: INFO
+    com.netflix.discovery: 'OFF'
+    org.springframework.cloud: 'DEBUG'
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    leaseExpirationDurationInSeconds: 5
+    preferIpAddress: true
+#eureka.instance.statusPageUrlPath: /admin/info
+#eureka.instance.healthCheckUrlPath: /admin/health
+
+#新版和老版的 instanceId配置规则不一样
+#eureka.instance.metadataMap.hostname: ${vcap.application.application_uris[0]}
+#eureka.instance.metadataMap.instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${random.value}}}
+
+eureka:
+  instance:
+    instanceId: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
+hystrix.stream.amqp.send-id: false
